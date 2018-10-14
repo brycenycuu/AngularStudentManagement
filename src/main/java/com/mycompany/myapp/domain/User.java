@@ -17,13 +17,11 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 import java.time.Instant;
-
 /**
  * A user.
  */
 @Entity
 @Table(name = "jhi_user")
-
 public class User extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

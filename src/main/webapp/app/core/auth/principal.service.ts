@@ -88,6 +88,16 @@ export class Principal {
         return this.authenticated;
     }
 
+    // Please realize this method
+    isTeacher(): boolean {
+        return false;
+    }
+
+    // Please realize this method
+    isStduent(): boolean {
+        return false;
+    }
+
     isIdentityResolved(): boolean {
         return this.userIdentity !== undefined;
     }
