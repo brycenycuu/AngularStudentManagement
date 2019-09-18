@@ -26,9 +26,22 @@ public class CourseController {
     public HttpEntity<List<CourseDto>> findAllCourses(){
 
         List<CourseDto> allCourses = courseService.findAllCourses();
+        System.out.printf(String.valueOf(allCourses));
+        return new ResponseEntity<>(allCourses, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/api/course/findAllCoursesLengthLargerThan10", produces = "application/json")
+    public HttpEntity<List<CourseDto>> findAllCoursesLengthLargerThan10() {
+
+        List<CourseDto> allCourses = courseService.findAllCoursesLengthLargerThan10();
 
         return new ResponseEntity<>(allCourses, HttpStatus.OK);
     }
+
+
+
+
+//    Next Lecture
 
     @GetMapping(path = "/api/course/findAllCoursesDto", produces = "application/json")
     public HttpEntity<List<CourseDto>> findAllCoursesDto(){
@@ -94,13 +107,13 @@ public class CourseController {
         }
     }
 
-    @PostMapping(path = "/api/course/addCourseToStudent/{courseName}", produces = "application/js")
-    public HttpStatus addCourseToStudent(@NotNull @PathVariable("courseName") UserCourse userCourse) {
-        try {
-            courseService.addCourseToStudent(userCourse);
-            return HttpStatus.OK;
-        } catch (Exception e) {
-            return HttpStatus.BAD_REQUEST;
-        }
-    }
+//    @PostMapping(path = "/api/course/addCourseToStudent/{courseName}", produces = "application/js")
+//    public HttpStatus addCourseToStudent(@NotNull @PathVariable("courseName") UserCourse userCourse) {
+//        try {
+//            courseService.addCourseToStudent(userCourse);
+//            return HttpStatus.OK;
+//        } catch (Exception e) {
+//            return HttpStatus.BAD_REQUEST;
+//        }
+//    }
 }

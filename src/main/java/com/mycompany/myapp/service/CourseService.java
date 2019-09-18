@@ -48,6 +48,23 @@ public class CourseService {
         return courseDtos;
     }
 
+    public List<CourseDto> findAllCoursesLengthLargerThan10() {
+
+        List<CourseDto> courseDtos = new ArrayList<>();
+        List<Course> courses = courseRepository.findAll();
+
+        for (Course c: courses) {
+            if (c.getCourseName().length() > 10) {
+                courseDtos.add(new CourseDto(c.getCourseName(), c.getCourseLocation(), c.getCourseContent(), c.getTeacherId()));
+            }
+        }
+
+        return courseDtos;
+    }
+
+
+//    Next Lecture
+
     public List<CourseDto> findAllCoursesDtoFromDB(){
         return courseRepository.findAllCoursesDto();
     }
@@ -123,21 +140,21 @@ public class CourseService {
 
     }
 
-    public void addCourseToStudent(UserCourse userCourse) throws Exception {
-
-        Optional<User> curUser = userService.getUserWithAuthorities();
-        // 2 find course from course table
-
-
-        UserCourse t1 =  UserCourse.builder()
-            .course(c1)
-            .user(curUser)
-            .build();
-
-        try {
-            UserCourseRepository.saveAndFlush(t1);
-        } catch (Exception e){
-            throw new Exception(e.getMessage());
-        }
-    }
+//    public void addCourseToStudent(UserCourse userCourse) throws Exception {
+//
+//        Optional<User> curUser = userService.getUserWithAuthorities();
+//        // 2 find course from course table
+//
+//
+//        UserCourse t1 =  UserCourse.builder()
+//            .course(c1)
+//            .user(curUser)
+//            .build();
+//
+//        try {
+//            UserCourseRepository.saveAndFlush(t1);
+//        } catch (Exception e){
+//            throw new Exception(e.getMessage());
+//        }
+//    }
 }
