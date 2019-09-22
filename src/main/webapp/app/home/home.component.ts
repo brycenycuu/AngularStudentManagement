@@ -80,8 +80,8 @@ export class HomeComponent implements OnInit {
         this.courses = [];
     }
 
-    addCourseToStudent() {
-        const courseName = 'temp';
-        this.courseService.addCourseToStudent(courseName, currentUserCredential);
-    }
+    // addCourseToStudent() {
+    //     const courseName = 'temp';
+    //     this.courseService.addCourseToStudent(courseName, currentUserCredential);
+    // }
 }
