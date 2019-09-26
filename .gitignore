@@ -5,6 +5,12 @@
 /src/test/javascript/coverage/
 
 ######################
+# Securiity
+######################
+/src/main/resources/config/application-dev.yml
+/webpack/webpack.common.js
+
+######################
 # Node
 ######################
 /node/
