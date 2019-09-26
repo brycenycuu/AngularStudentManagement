@@ -7,6 +7,7 @@ import com.mycompany.myapp.domain.dto.CourseDto;
 import com.mycompany.myapp.domain.dto.CourseWithTNDto;
 import com.mycompany.myapp.repository.CourseRepository;
 import com.mycompany.myapp.repository.UserCourseRepository;
+import com.mycompany.myapp.repository.UserRepository;
 import org.checkerframework.checker.units.qual.A;
 import org.checkerframework.checker.units.qual.C;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +28,9 @@ public class CourseService {
 
     @Autowired
     private UserCourseRepository userCourseRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
@@ -69,8 +74,28 @@ public class CourseService {
         return courseRepository.findAllCoursesDto();
     }
 
-    public List<CourseWithTNDto> findAllCoursesDtoWithTeacherNameFromDB(){
-        return courseRepository.findAllCoursesDtoWithTeacherName();
+    public List<CourseWithTNDto> findAllRegisteredCourses(Long userId) {
+
+        Optional<User> curUser = userRepository.findOneById(userId);
+        List<CourseWithTNDto> courseTNDtos = new ArrayList<>();
+
+        if (curUser.isPresent()) {
+            User user = curUser.get();
+            Optional<List<UserCourse>> userCourseOp = userCourseRepository.findAllByUser(user);
+            if (userCourseOp.isPresent()) {
+                List<UserCourse> userCourse = userCourseOp.get();
+                for (UserCourse uc : userCourse) {
+                    Course ucCourse = uc.getCourse();
+                    Optional<User> teacher = userRepository.findOneById(ucCourse.getTeacherId());
+                    if (teacher.isPresent()) {
+                        User t = teacher.get();
+                        courseTNDtos.add(new CourseWithTNDto(ucCourse.getCourseName(), ucCourse.getCourseLocation(), ucCourse.getCourseContent(), t.getLogin()));
+                    }
+                }
+            }
+        }
+        return courseTNDtos;
+
     }
 
 
@@ -98,9 +123,11 @@ public class CourseService {
         Course courseBeingSaved = Course.builder()
             .courseName(course.getCourseName())
             .courseContent(course.getCourseContent())
-            .courseLocation(course.getCourseContent())
+            .courseLocation(course.getCourseLocation())
             .teacherId(course.getTeacherId())
             .build();
+
+        System.out.print("in");
 
         try {
             courseRepository.saveAndFlush(courseBeingSaved);
@@ -145,7 +172,6 @@ public class CourseService {
 //        Optional<User> curUser = userService.getUserWithAuthorities();
 //        // 2 find course from course table
 //
-//
 //        UserCourse t1 =  UserCourse.builder()
 //            .course(c1)
 //            .user(curUser)
@@ -157,4 +183,5 @@ public class CourseService {
 //            throw new Exception(e.getMessage());
 //        }
 //    }
+
 }

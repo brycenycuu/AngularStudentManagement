@@ -25,6 +25,12 @@ export class HomeComponent implements OnInit {
     ) {}
 
     courses: CourseDto[] = [];
+    newCourse: CourseDto = new class implements CourseDto {
+        courseContent: string = '';
+        courseLocation: string = '';
+        courseName: string = '';
+        teacherId: string = '';
+    }();
 
     coursesWithTN: CourseWithTNDto[] = [];
 
@@ -52,18 +58,19 @@ export class HomeComponent implements OnInit {
     }
 
     getAllCourses() {
-        debugger;
         this.courseService.getCourseInfo().subscribe(curDto => {
             if (!curDto) {
                 this.courses = [];
             } else {
                 this.courses = curDto;
+                console.log(curDto);
             }
         });
     }
 
     getAllCoursesWithTN() {
-        this.courseService.getCourseInfoWithTN().subscribe(curDto => {
+        const userId = this.account['id'];
+        this.courseService.getCourseInfoWithTN(userId).subscribe(curDto => {
             if (!curDto) {
                 this.coursesWithTN = [];
             } else {
@@ -72,16 +79,45 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    // registerCourse(courseName) {
-    //
-    // }
+    createCourse() {
+        this.courseService.create(this.newCourse).subscribe(res => {
+            if (res) {
+                this.getAllCourses();
+                this.clearInput();
+            }
+        });
+    }
+
+    clearInput() {
+        this.newCourse.courseName = '';
+        this.newCourse.teacherId = '';
+        this.newCourse.courseContent = '';
+        this.newCourse.courseLocation = '';
+    }
 
     clearAllCourses() {
         this.courses = [];
     }
 
-    // addCourseToStudent() {
-    //     const courseName = 'temp';
-    //     this.courseService.addCourseToStudent(courseName, currentUserCredential);
-    // }
+    clearAllCourseTN() {
+        this.coursesWithTN = [];
+    }
+
+    deleteCourse(courseName) {
+        this.courseService.delete(courseName).subscribe(res => {
+            if (res) {
+                this.getAllCourses();
+            }
+        });
+    }
+
+    addCourseToStudent(courseName) {
+        // const currentUserCredential = this.account["id"];
+        // this.courseService.addCourseToStudent(courseName, currentUserCredential);
+        this.courseService.addCourseToStudent(courseName).subscribe(res => {
+            if (res) {
+                this.getAllCoursesWithTN();
+            }
+        });
+    }
 }

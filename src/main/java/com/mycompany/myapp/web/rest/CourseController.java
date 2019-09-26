@@ -1,6 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Course;
+import com.mycompany.myapp.domain.UserCourse;
 import com.mycompany.myapp.domain.dto.CourseDto;
 import com.mycompany.myapp.domain.dto.CourseWithTNDto;
 import com.mycompany.myapp.service.CourseService;
@@ -24,9 +25,7 @@ public class CourseController {
 
     @GetMapping(path = "/api/course/findAllCourses", produces = "application/json")
     public HttpEntity<List<CourseDto>> findAllCourses(){
-
         List<CourseDto> allCourses = courseService.findAllCourses();
-        System.out.printf(String.valueOf(allCourses));
         return new ResponseEntity<>(allCourses, HttpStatus.OK);
     }
 
@@ -38,11 +37,6 @@ public class CourseController {
         return new ResponseEntity<>(allCourses, HttpStatus.OK);
     }
 
-
-
-
-//    Next Lecture
-
     @GetMapping(path = "/api/course/findAllCoursesDto", produces = "application/json")
     public HttpEntity<List<CourseDto>> findAllCoursesDto(){
         List<CourseDto> allCourses = courseService.findAllCoursesDtoFromDB();
@@ -50,9 +44,9 @@ public class CourseController {
         return new ResponseEntity<>(allCourses, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/api/course/findAllCoursesWithTNDto", produces = "application/json")
-    public HttpEntity<List<CourseWithTNDto>> findAllCoursesWithTNDto(){
-        List<CourseWithTNDto> allCourses = courseService.findAllCoursesDtoWithTeacherNameFromDB();
+    @GetMapping(path = "/api/course/findAllCoursesWithTNDto/{userId}", produces = "application/json")
+    public HttpEntity<List<CourseWithTNDto>> findAllCoursesWithTNDto(@PathVariable Long userId){
+        List<CourseWithTNDto> allCourses = courseService.findAllRegisteredCourses(userId);
 
         return new ResponseEntity<>(allCourses, HttpStatus.OK);
     }
@@ -93,12 +87,14 @@ public class CourseController {
             courseService.addCourse(course);
             return HttpStatus.OK;
         } catch (Exception e) {
+            System.out.print(String.valueOf(e));
             return HttpStatus.BAD_REQUEST;
         }
     }
 
-    @DeleteMapping(path = "/api/course/deleteCourse/{courseName}", produces = "application/js")
+    @DeleteMapping(path = "/api/course/deleteCourse/{courseName}", produces = "application/json")
     public HttpStatus deleteCourse(@NotNull @PathVariable("courseName") String courseName) {
+        System.out.print(courseName);
         try {
             courseService.deleteCourse(courseName);
             return HttpStatus.OK;
@@ -116,4 +112,14 @@ public class CourseController {
 //            return HttpStatus.BAD_REQUEST;
 //        }
 //    }
+
+    @PostMapping(path = "/api/course/addCourseToStudent", produces = "application/json")
+    public HttpStatus addCourseToStudent(@RequestBody @NotNull String courseName) {
+        try {
+            courseService.registerCourse(courseName);
+            return HttpStatus.OK;
+        } catch (Exception e) {
+            return HttpStatus.BAD_REQUEST;
+        }
+    }
 }
