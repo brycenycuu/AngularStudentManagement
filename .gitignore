@@ -7,8 +7,7 @@
 ######################
 # Securiity
 ######################
-/src/main/resources/config/application-dev.yml
-/webpack/webpack.common.js
+
 
 ######################
 # Node
