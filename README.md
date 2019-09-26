@@ -1,5 +1,5 @@
-# jiuzhangquanzhanke
-This application was generated using JHipster 5.1.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v5.1.0](https://www.jhipster.tech/documentation-archive/v5.1.0).
+# coursearching
+This application was originally from Jiuzhang.com online full-stack tutorial and was generated using JHipster 5.1.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v5.1.0](https://www.jhipster.tech/documentation-archive/v5.1.0).
 
 ## Development
 
